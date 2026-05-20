@@ -107,12 +107,78 @@ export function makeStreamRenderer(initialTitle: string): StreamRenderer {
   let catsListEl: HTMLUListElement | null = null;
   let pendingInfoboxTitle = initialTitle;
 
+  function prepareImageFade(img: HTMLImageElement): void {
+    img.classList.add('iw-img-fade');
+    if (img.getAttribute('src') && img.complete && img.naturalWidth > 0) {
+      img.classList.add('iw-img-loaded');
+      return;
+    }
+    img.addEventListener(
+      'load',
+      () => {
+        if (img.naturalWidth > 0) img.classList.add('iw-img-loaded');
+      },
+      { once: true }
+    );
+  }
+
+  function animateFragment(root: DocumentFragment | HTMLElement): void {
+    root.querySelectorAll('img').forEach(prepareImageFade);
+
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode: (node) => {
+        let p: HTMLElement | null = node.parentElement;
+        while (p) {
+          const tag = p.tagName;
+          if (tag === 'SCRIPT' || tag === 'STYLE') return NodeFilter.FILTER_REJECT;
+          if (p.classList && p.classList.contains('iw-char')) return NodeFilter.FILTER_REJECT;
+          p = p.parentElement;
+        }
+        return NodeFilter.FILTER_ACCEPT;
+      },
+    });
+    const nodes: Text[] = [];
+    let n: Node | null;
+    while ((n = walker.nextNode())) nodes.push(n as Text);
+
+    let i = 0;
+    for (const tn of nodes) {
+      const text = tn.nodeValue || '';
+      if (!text) continue;
+      const parent = tn.parentNode;
+      if (!parent) continue;
+      const replacement = document.createDocumentFragment();
+      for (const ch of text) {
+        if (ch === ' ' || ch === '\n' || ch === '\t' || ch === ' ') {
+          replacement.appendChild(document.createTextNode(ch));
+          continue;
+        }
+        const span = document.createElement('span');
+        span.className = 'iw-char';
+        const delay = Math.min(i * 10, 600);
+        if (delay > 0) span.style.animationDelay = `${delay}ms`;
+        span.textContent = ch;
+        replacement.appendChild(span);
+        i++;
+      }
+      parent.replaceChild(replacement, tn);
+    }
+  }
+
   function appendHtml(html: string): DocumentFragment {
     const tpl = document.createElement('template');
     tpl.innerHTML = html;
     const frag = tpl.content;
+    animateFragment(frag);
     live.appendChild(frag);
     return frag;
+  }
+
+  function appendHtmlTo(target: HTMLElement, html: string): void {
+    const tpl = document.createElement('template');
+    tpl.innerHTML = html;
+    animateFragment(tpl.content);
+    target.appendChild(tpl.content);
   }
 
   function closeRefs(): void {
@@ -146,7 +212,16 @@ export function makeStreamRenderer(initialTitle: string): StreamRenderer {
     const url = await searchCommonsImage(search);
     if (url) {
       const el = live.querySelector<HTMLImageElement>(`[data-img-id="${id}"]`);
-      if (el) el.src = url;
+      if (el) {
+        el.addEventListener(
+          'load',
+          () => {
+            if (el.naturalWidth > 0) el.classList.add('iw-img-loaded');
+          },
+          { once: true }
+        );
+        el.src = url;
+      }
     } else {
       // Remove the whole figure container. For section thumbs the container is
       // [data-iw-fig]; for the infobox image the marker is on the img itself, so
@@ -266,11 +341,7 @@ export function makeStreamRenderer(initialTitle: string): StreamRenderer {
           refsListEl = ol;
           refsOpen = true;
         }
-        if (refsListEl) {
-          const tpl = document.createElement('template');
-          tpl.innerHTML = renderReferenceItem(e.value);
-          refsListEl.appendChild(tpl.content);
-        }
+        if (refsListEl) appendHtmlTo(refsListEl, renderReferenceItem(e.value));
         break;
       }
       case 'category': {
@@ -289,11 +360,7 @@ export function makeStreamRenderer(initialTitle: string): StreamRenderer {
           catsListEl = ul;
           catsOpen = true;
         }
-        if (catsListEl) {
-          const tpl = document.createElement('template');
-          tpl.innerHTML = renderCategoryItem(e.value);
-          catsListEl.appendChild(tpl.content);
-        }
+        if (catsListEl) appendHtmlTo(catsListEl, renderCategoryItem(e.value));
         break;
       }
     }
@@ -325,7 +392,17 @@ export function makeStreamRenderer(initialTitle: string): StreamRenderer {
   }
 
   function finalHtml(): string {
-    return live.innerHTML;
+    const clone = live.cloneNode(true) as HTMLElement;
+    clone.querySelectorAll('span.iw-char').forEach((span) => {
+      span.replaceWith(document.createTextNode(span.textContent || ''));
+    });
+    clone.normalize();
+    clone.querySelectorAll('img').forEach((img) => {
+      img.classList.remove('iw-img-fade');
+      img.classList.remove('iw-img-loaded');
+      if (img.getAttribute('class') === '') img.removeAttribute('class');
+    });
+    return clone.innerHTML;
   }
 
   return {

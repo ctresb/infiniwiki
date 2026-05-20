@@ -188,6 +188,42 @@ body { font-family: sans-serif; }
   color: #202122;
 }
 
+/* ===== Streaming fade-in =====
+   Each character in a freshly streamed block is wrapped in span.iw-char by
+   renderer.ts. Spans retain layout so the block's final size is reserved
+   before any glyph is visible — no reflow as text materializes. */
+
+@keyframes iw-char-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.mw-parser-output .iw-char {
+  opacity: 0;
+  animation: iw-char-fade-in 200ms ease-out forwards;
+  will-change: opacity;
+}
+
+.mw-parser-output img.iw-img-fade {
+  opacity: 0;
+  transition: opacity 400ms ease-out;
+}
+
+.mw-parser-output img.iw-img-fade.iw-img-loaded {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mw-parser-output .iw-char {
+    opacity: 1;
+    animation: none;
+  }
+  .mw-parser-output img.iw-img-fade {
+    opacity: 1;
+    transition: none;
+  }
+}
+
 /* ===== Text-wrap guards =====
    wikipedia.css does not consistently enforce wrapping inside floated/table
    containers. These rules ensure long strings (captions, infobox values,
