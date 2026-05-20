@@ -1,0 +1,181 @@
+{
+    "type": "object",
+    "properties": {
+        "displayTitle": {
+            "type": "string",
+            "description": "The main title of the Wikipedia article, corresponding to the primary subject."
+        },
+        "hatnote": {
+            "type": "string",
+            "nullable": true,
+            "description": "A disambiguation notice appearing at the very top of the article. If present, it must follow the exact format: 'For other uses, see [Topic (disambiguation)](/topic-disambiguation).'"
+        },
+        "lead": {
+            "type": "string",
+            "description": "The opening introductory paragraphs of the article before the first section heading. The subject's name must be bolded on its first mention using **bold**. It must contain internal links utilizing the format [Visible Text](/slug), where the slug is completely lowercase, stripped of all accents and diacritics, and uses hyphens instead of spaces."
+        },
+        "infobox": {
+            "type": "object",
+            "description": "The summary information box typically found floating on the top right of a Wikipedia article.",
+            "properties": {
+                "image_search": {
+                    "type": "string",
+                    "description": "A short, multilingual search term used to query Wikimedia Commons and retrieve a real photograph. Use the most effective language for the subject (e.g., Portuguese for Brazilian subjects, English for universal ones)."
+                },
+                "image_caption": {
+                    "type": "string",
+                    "description": "The caption describing the infobox image. May contain internal links following the standard slug format."
+                },
+                "fields": {
+                    "type": "array",
+                    "description": "An array of key-value pairs representing the structured data rows inside the infobox.",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "label": {
+                                "type": "string",
+                                "description": "The property name or label (e.g., 'Capital', 'Born', 'Type')."
+                            },
+                            "value": {
+                                "type": "string",
+                                "description": "The value for the property. Can include text and internal links following the standard slug format."
+                            }
+                        },
+                        "required": [
+                            "label",
+                            "value"
+                        ]
+                    }
+                }
+            },
+            "required": [
+                "image_search",
+                "image_caption",
+                "fields"
+            ]
+        },
+        "sections": {
+            "type": "array",
+            "description": "The main body of the article divided into hierarchical sections and subsections.",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "description": "The heading title of the section."
+                    },
+                    "level": {
+                        "type": "integer",
+                        "description": "The heading level indicating structural hierarchy. Use 2 for major sections (corresponding to ##) and 3 for subsections (corresponding to ###)."
+                    },
+                    "content": {
+                        "type": "string",
+                        "description": "The full paragraph text of the section. Must contain internal links using the format [Visible Text](/slug), where the slug is completely lowercase, stripped of all accents and diacritics, and uses hyphens instead of spaces."
+                    },
+                    "images": {
+                        "type": "array",
+                        "description": "A collection of images embedded within this specific section.",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "search": {
+                                    "type": "string",
+                                    "description": "A specific Wikimedia Commons search term to fetch a visually relevant real photograph. Must use the most effective language for the query to return accurate real-world results."
+                                },
+                                "caption": {
+                                    "type": "string",
+                                    "description": "The encyclopedic caption describing the image. May contain internal links following the standard slug format."
+                                },
+                                "float": {
+                                    "type": "string",
+                                    "description": "The alignment of the image relative to the text. Images must alternate between left and right throughout the article.",
+                                    "enum": [
+                                        "left",
+                                        "right"
+                                    ]
+                                }
+                            },
+                            "required": [
+                                "search",
+                                "caption",
+                                "float"
+                            ]
+                        }
+                    }
+                },
+                "required": [
+                    "title",
+                    "level",
+                    "content",
+                    "images"
+                ]
+            }
+        },
+        "references": {
+            "type": "array",
+            "description": "The bibliography and citations section found at the bottom of the article, providing sources for the claims made in the text.",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "author": {
+                        "type": "string",
+                        "description": "The author of the cited work, conventionally formatted (e.g., 'Lastname, Firstname' or 'Lastname, F. I.')."
+                    },
+                    "year": {
+                        "type": "string",
+                        "description": "The year of publication."
+                    },
+                    "title": {
+                        "type": "string",
+                        "description": "The title of the cited work."
+                    },
+                    "publication": {
+                        "type": "string",
+                        "description": "The name of the journal, magazine, newspaper, or publishing house."
+                    },
+                    "pages": {
+                        "type": "string",
+                        "description": "The page range or specific page number of the citation (e.g., '12-14', '201')."
+                    }
+                },
+                "required": [
+                    "author",
+                    "year",
+                    "title",
+                    "publication",
+                    "pages"
+                ]
+            }
+        },
+        "categories": {
+            "type": "array",
+            "description": "The list of Wikipedia categories the article belongs to, structurally placed at the very bottom of the page.",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "label": {
+                        "type": "string",
+                        "description": "The visible human-readable category name (e.g., 'Eventos de 2019 no Brasil')."
+                    },
+                    "slug": {
+                        "type": "string",
+                        "description": "The internal link slug for the category. Must be strictly lowercase, accent-free, and hyphen-separated (e.g., '/categoria-eventos-de-2019-no-brasil')."
+                    }
+                },
+                "required": [
+                    "label",
+                    "slug"
+                ]
+            }
+        }
+    },
+    "required": [
+        "displayTitle",
+        "hatnote",
+        "lead",
+        "infobox",
+        "sections",
+        "references",
+        "categories"
+    ]
+}

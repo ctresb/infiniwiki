@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/home.tsx","./src/wikipage.tsx","./src/audiohydrate.ts","./src/cache.ts","./src/gemini.ts","./src/main.tsx","./src/parser.ts","./src/renderer.ts","./src/router.ts","./src/slug.ts","./src/streamparser.ts","./src/types.ts","./src/urlrewrite.ts","./src/vite-env.d.ts","./src/wikimedia.ts"],"version":"5.9.3"}

@@ -1,0 +1,464 @@
+/* App chrome only. Article body styling comes from local Wikipedia CSS bundle. */
+
+html, body { margin: 0; padding: 0; background: #fff; }
+body { font-family: sans-serif; }
+
+.app { min-height: 100vh; }
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 8px 16px;
+  background: #fff;
+  border-bottom: 1px solid #a2a9b1;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-logo-link { display: block; }
+.logo { height: 60px; display: block; }
+
+/* Header search */
+.iw-search {
+  flex: 0 1 480px;
+  display: flex;
+  align-items: stretch;
+  font-family: sans-serif;
+  font-size: 14px;
+  height: 36px;
+  box-sizing: border-box;
+}
+.iw-search * { box-sizing: border-box; }
+.iw-search__field {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+}
+.iw-search__icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: block;
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 22' fill='none' stroke='%2354595d' stroke-width='2.4'%3E%3Ccircle cx='9' cy='9' r='6'/%3E%3Cline x1='13.5' y1='13.5' x2='20' y2='20' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+.iw-search__input {
+  flex: 1;
+  width: 100%;
+  height: 36px;
+  margin: 0;
+  padding: 0 10px 0 32px;
+  border: 1px solid #a2a9b1;
+  border-radius: 2px 0 0 2px;
+  background: #fff;
+  font: inherit;
+  color: #202122;
+  outline: 0;
+  -webkit-appearance: none;
+  appearance: none;
+  transition: border-color 0.1s, box-shadow 0.1s;
+}
+.iw-search__input::placeholder { color: #72777d; }
+.iw-search__input:hover { border-color: #72777d; }
+.iw-search__input:focus { border-color: #36c; box-shadow: inset 0 0 0 1px #36c; }
+.iw-search__button {
+  flex-shrink: 0;
+  height: 36px;
+  margin: 0;
+  padding: 0 16px;
+  background: #f8f9fa;
+  border: 1px solid #a2a9b1;
+  border-left: 0;
+  border-radius: 0 2px 2px 0;
+  font: inherit;
+  font-weight: 500;
+  color: #202122;
+  cursor: pointer;
+  transition: background-color 0.1s, border-color 0.1s, color 0.1s;
+}
+.iw-search__button:hover { background: #fff; border-color: #72777d; color: #000; }
+.iw-search__button:active { background: #eaecf0; border-color: #2a4b8d; color: #000; }
+
+.status-line {
+  padding: 10px 16px;
+  font-size: 13px;
+  color: #54595d;
+}
+
+.not-found {
+  padding: 64px 32px;
+  font-family: sans-serif;
+  color: #202122;
+}
+.not-found h1 { font-family: 'Linux Libertine', Georgia, serif; font-weight: normal; }
+.not-found code {
+  background: #f8f9fa;
+  border: 1px solid #eaecf0;
+  padding: 1px 6px;
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 13px;
+}
+.not-found a { color: #36c; }
+
+/* Two-column layout: sticky TOC sidebar + main article */
+.wiki-shell {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 24px;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 16px 24px 64px;
+  align-items: start;
+}
+
+.wiki-sidebar {
+  position: sticky;
+  top: 88px;
+  align-self: start;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+  font-family: sans-serif;
+  font-size: 13px;
+  padding-right: 8px;
+  border-right: 1px solid #eaecf0;
+}
+
+.wiki-toc-header {
+  font-weight: 600;
+  font-size: 14px;
+  color: #202122;
+  padding: 4px 0 8px 8px;
+  border-bottom: 1px solid #eaecf0;
+  margin-bottom: 8px;
+}
+
+.wiki-toc-list { list-style: none; padding: 0; margin: 0; }
+
+.wiki-toc-item a {
+  display: block;
+  padding: 4px 8px;
+  color: #202122;
+  text-decoration: none;
+  border-left: 2px solid transparent;
+  line-height: 1.35;
+}
+.wiki-toc-item a:hover {
+  background: #eaecf0;
+  border-left-color: #36c;
+}
+.wiki-toc-level-1 a { font-weight: 600; }
+.wiki-toc-level-2 a { padding-left: 8px; }
+.wiki-toc-level-3 a { padding-left: 24px; color: #54595d; font-size: 12.5px; }
+.wiki-toc-level-4 a { padding-left: 40px; color: #72777d; font-size: 12px; }
+
+.wiki-main { background: #fff; min-width: 0; }
+
+#firstHeading.firstHeading {
+  font-family: 'Linux Libertine', Georgia, 'Times New Roman', serif;
+  font-size: 1.8em;
+  font-weight: normal;
+  margin: 0 0 0.25em;
+  padding-bottom: 0.17em;
+  border-bottom: 1px solid #a2a9b1;
+  line-height: 1.3;
+  color: #000;
+}
+
+#siteSub {
+  font-size: 92%;
+  color: #54595d;
+  margin-bottom: 14px;
+  font-family: sans-serif;
+}
+
+.mw-parser-output {
+  font-family: sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #202122;
+}
+
+/* ===== Text-wrap guards =====
+   wikipedia.css does not consistently enforce wrapping inside floated/table
+   containers. These rules ensure long strings (captions, infobox values,
+   hatnotes, references) break to the next line instead of overflowing. */
+
+.mw-parser-output .thumb,
+.mw-parser-output .thumbinner,
+.mw-parser-output .thumbcaption,
+.mw-parser-output .infobox,
+.mw-parser-output .infobox td,
+.mw-parser-output .infobox th,
+.mw-parser-output .infobox-image,
+.mw-parser-output .infobox-caption,
+.mw-parser-output .infobox-data,
+.mw-parser-output .infobox-label,
+.mw-parser-output .infobox-title,
+.mw-parser-output .hatnote,
+.mw-parser-output .references li,
+.mw-parser-output .catlinks li {
+  overflow-wrap: anywhere;
+  word-wrap: break-word;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.mw-parser-output .infobox {
+  table-layout: fixed;
+  width: 22em;
+  max-width: 100%;
+}
+
+.mw-parser-output .infobox .infobox-image img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.mw-parser-output .infobox-caption {
+  font-size: 0.85em;
+  padding: 6px 4px 0;
+  text-align: center;
+  font-style: italic;
+}
+
+.mw-parser-output .thumbinner {
+  max-width: 100%;
+}
+
+.mw-parser-output .thumbcaption {
+  font-size: 0.86em;
+  line-height: 1.4;
+  padding: 4px 2px 0;
+}
+
+html { scroll-behavior: smooth; scroll-padding-top: 88px; }
+
+@media (max-width: 900px) {
+  .wiki-shell { grid-template-columns: 1fr; }
+  .wiki-sidebar {
+    position: static;
+    max-height: none;
+    border-right: none;
+    border-bottom: 1px solid #eaecf0;
+    padding-right: 0;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+  }
+}
+
+/* ===== TMH / Phonos dialog overlay ===== */
+
+.iw-tmh-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.iw-tmh-dialog {
+  background: #fff;
+  width: min(720px, 100%);
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  border-radius: 2px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+}
+
+.iw-tmh-dialog .oo-ui-window-content { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+.iw-tmh-dialog .oo-ui-window-head {
+  border-bottom: 1px solid #c8ccd1;
+  background: #f8f9fa;
+}
+.iw-tmh-dialog .oo-ui-processDialog-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 44px;
+  padding: 0 8px;
+}
+.iw-tmh-dialog .oo-ui-processDialog-location {
+  flex: 1;
+  text-align: center;
+  font-weight: 600;
+  color: #202122;
+}
+.iw-tmh-dialog .iw-tmh-close-wrap {
+  display: flex;
+  align-items: center;
+}
+.iw-tmh-dialog .iw-tmh-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  color: #54595d;
+  border-radius: 2px;
+  transition: background-color 0.1s;
+}
+.iw-tmh-dialog .iw-tmh-close:hover { background: #eaecf0; }
+.iw-tmh-dialog .iw-tmh-close:active { background: #c8ccd1; }
+.iw-tmh-dialog .iw-tmh-close svg { display: block; }
+
+.iw-tmh-dialog .oo-ui-window-body {
+  padding: 24px;
+  background: #fff;
+  display: block;
+}
+.iw-tmh-dialog .video-js {
+  width: 100% !important;
+  height: 48px !important;
+  background: transparent;
+  font-size: 14px;
+}
+.iw-tmh-dialog .video-js .vjs-tech { display: none !important; }
+.iw-tmh-dialog .video-js.vjs-audio-only-mode {
+  height: 48px !important;
+  max-height: 48px;
+}
+.iw-tmh-dialog .video-js .vjs-control-bar {
+  background: #2c2c2c;
+  border-radius: 4px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  gap: 4px;
+}
+.iw-tmh-dialog .video-js .vjs-button > .vjs-icon-placeholder::before,
+.iw-tmh-dialog .video-js .vjs-control:focus::before,
+.iw-tmh-dialog .video-js .vjs-control:hover::before {
+  color: #fff;
+  text-shadow: none;
+}
+.iw-tmh-dialog .video-js .vjs-time-control {
+  color: #fff;
+  font-family: ui-monospace, Menlo, monospace;
+  line-height: 48px;
+}
+.iw-tmh-dialog .video-js .vjs-progress-control {
+  flex: 1;
+  height: 48px;
+  min-width: 80px;
+}
+.iw-tmh-dialog .video-js .vjs-slider {
+  background: #555;
+}
+.iw-tmh-dialog .video-js .vjs-play-progress,
+.iw-tmh-dialog .video-js .vjs-volume-level {
+  background: #36c;
+}
+.iw-tmh-dialog .video-js .vjs-load-progress {
+  background: rgba(255, 255, 255, 0.2);
+}
+.iw-tmh-dialog .video-js .vjs-load-progress > div { background: rgba(255, 255, 255, 0.15); }
+.iw-tmh-dialog .video-js .vjs-fullscreen-control,
+.iw-tmh-dialog .video-js .vjs-picture-in-picture-control {
+  display: none !important;
+}
+.iw-tmh-dialog .oo-ui-window-foot {
+  height: 8px;
+  background: #f8f9fa;
+}
+
+/* ===== Home page (light) ===== */
+
+.home {
+  min-height: 100vh;
+  background: #fff;
+  color: #202122;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 15vh 16px 32px;
+}
+
+.home-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 720px;
+}
+
+.home-favicon {
+  width: 240px;
+  height: 240px;
+  object-fit: contain;
+  margin-bottom: 12px;
+}
+
+.home-wordmark {
+  display: block;
+  width: min(285px, 50vw);
+  height: auto;
+  margin: 0 0 64px;
+}
+
+.home-tagline {
+  font-family: 'Linux Libertine', Georgia, 'Times New Roman', serif;
+  font-size: 20px;
+  color: #54595d;
+  margin-top: 8px;
+  letter-spacing: 0.02em;
+}
+
+.home-search {
+  display: flex;
+  width: 100%;
+  max-width: 560px;
+  margin-top: 40px;
+  border: 1px solid #a2a9b1;
+  border-radius: 2px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.home-search input {
+  flex: 1;
+  background: transparent;
+  border: 0;
+  outline: 0;
+  padding: 14px 16px;
+  font-size: 16px;
+  color: #202122;
+}
+.home-search input::placeholder { color: #72777d; }
+
+.home-search:focus-within { border-color: #36c; box-shadow: inset 0 0 0 1px #36c; }
+
+.home-search button {
+  background: #36c;
+  border: 0;
+  color: #fff;
+  padding: 0 22px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.home-search button:hover { background: #447ff5; }
