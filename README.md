@@ -41,7 +41,7 @@ Aproveite.
 ### 1. Clonar o repositório
 
 ```bash
-git clone https://github.com/seu-usuario/infiniwiki.git
+git clone https://github.com/ctresb/infiniwiki.git
 cd infiniwiki
 ```
 
